@@ -7,19 +7,15 @@
 
 ## Configuration
 
-### Option 1: Using VS Code MCP Settings (Recommended)
+### Workspace Configuration (Recommended)
 
-Create or edit your VS Code MCP configuration file at:
-- **macOS/Linux**: `~/.config/Code/User/settings.json`
-- **Windows**: `%APPDATA%\Code\User\settings.json`
-
-Add the following to your `settings.json` (replace `/path/to/buildingmotif-mcp` with your actual clone path):
+Create `.vscode/mcp.json` in your project root:
 
 ```json
 {
-  "mcp.servers": {
+  "servers": {
     "buildingmotif": {
-      "command": "/path/to/buildingmotif-mcp/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["-m", "buildingmotif_mcp.main"],
       "env": {}
     }
@@ -27,13 +23,15 @@ Add the following to your `settings.json` (replace `/path/to/buildingmotif-mcp` 
 }
 ```
 
+This configuration uses `${workspaceFolder}` to reference your Python virtual environment, making it portable across different machines.
+
 **With custom ontologies:**
 
 ```json
 {
-  "mcp.servers": {
+  "servers": {
     "buildingmotif": {
-      "command": "/path/to/buildingmotif-mcp/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["-m", "buildingmotif_mcp.main"],
       "env": {
         "BUILDINGMOTIF_ONTOLOGY_PATHS": "/path/to/custom/ontologies"
@@ -43,15 +41,15 @@ Add the following to your `settings.json` (replace `/path/to/buildingmotif-mcp` 
 }
 ```
 
-### Option 2: Workspace-Specific Configuration
+### Alternative: Global Configuration
 
-Create `.vscode/settings.json` in your project root:
+Create or edit `~/.vscode/mcp.json` (replace `/path/to/buildingmotif-mcp` with your actual clone path):
 
 ```json
 {
-  "mcp.servers": {
+  "servers": {
     "buildingmotif": {
-      "command": "${workspaceFolder}/.venv/bin/python",
+      "command": "/path/to/buildingmotif-mcp/.venv/bin/python",
       "args": ["-m", "buildingmotif_mcp.main"],
       "env": {}
     }
@@ -178,9 +176,9 @@ Add logging configuration to your settings:
 
 ```json
 {
-  "mcp.servers": {
+  "servers": {
     "buildingmotif": {
-      "command": "/path/to/buildingmotif-mcp/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["-m", "buildingmotif_mcp.main"],
       "env": {
         "LOG_LEVEL": "DEBUG"
@@ -196,9 +194,9 @@ Load ontologies from multiple directories:
 
 ```json
 {
-  "mcp.servers": {
+  "servers": {
     "buildingmotif": {
-      "command": "/path/to/buildingmotif-mcp/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["-m", "buildingmotif_mcp.main"],
       "env": {
         "BUILDINGMOTIF_ONTOLOGY_PATHS": "/path/to/buildingmotif-mcp/ontologies:/path/to/my-org/custom-shapes"

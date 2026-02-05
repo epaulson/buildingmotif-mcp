@@ -28,21 +28,52 @@ class OntologyManager:
         self.ontology_paths = ontology_paths or []
 
         # Always add bundled ontologies - handle both dev and installed scenarios
+        ontologies_found = False
+        
+        # Strategy 1: Check relative to this file (development scenario)
         bundled_ontologies = Path(__file__).parent.parent / "ontologies"
         if bundled_ontologies.exists():
             logger.info(f"Found bundled ontologies at: {bundled_ontologies}")
             self.ontology_paths.insert(0, str(bundled_ontologies))
-        else:
-            # Try to find ontologies from installed package location
+            ontologies_found = True
+        
+        # Strategy 2: Check from current working directory (VS Code scenario)
+        if not ontologies_found:
+            cwd_ontologies = Path.cwd() / "ontologies"
+            if cwd_ontologies.exists():
+                logger.info(f"Found ontologies in working directory: {cwd_ontologies}")
+                self.ontology_paths.insert(0, str(cwd_ontologies))
+                ontologies_found = True
+        
+        # Strategy 3: Check common installation paths
+        if not ontologies_found:
+            common_paths = [
+                Path.home() / ".local" / "share" / "buildingmotif_mcp" / "ontologies",
+                Path("/opt/buildingmotif_mcp/ontologies"),
+                Path("/usr/local/share/buildingmotif_mcp/ontologies"),
+            ]
+            for path in common_paths:
+                if path.exists():
+                    logger.info(f"Found installed ontologies at: {path}")
+                    self.ontology_paths.insert(0, str(path))
+                    ontologies_found = True
+                    break
+        
+        # Strategy 4: Try importlib.resources for installed package
+        if not ontologies_found:
             try:
                 import importlib.resources as pkg_resources
                 # For Python 3.9+
                 ontologies_path = Path(str(pkg_resources.files('buildingmotif_mcp'))) / "ontologies"
                 if ontologies_path.exists():
-                    logger.info(f"Found installed ontologies at: {ontologies_path}")
+                    logger.info(f"Found ontologies via importlib at: {ontologies_path}")
                     self.ontology_paths.insert(0, str(ontologies_path))
+                    ontologies_found = True
             except (ImportError, AttributeError, TypeError):
-                logger.warning("Could not find bundled ontologies in installed package")
+                pass
+        
+        if not ontologies_found:
+            logger.warning("No bundled ontologies found. Some ontology loading may fail.")
 
         logger.info(f"Ontology search paths: {self.ontology_paths}")
         self._load_ontologies()

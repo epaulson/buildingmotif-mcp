@@ -1,6 +1,7 @@
 """Core MCP server implementation for BuildingMOTIF."""
 
 import logging
+import sys
 from typing import Any
 
 from mcp.server import Server
@@ -105,6 +106,6 @@ class BuildingMOTIFServer:
 
     async def run(self) -> None:
         """Run the MCP server."""
-        async with stdio_server(self.server) as (read_stream, write_stream):
+        async with stdio_server(self.server, sys.stdin.buffer, sys.stdout.buffer) as (read_stream, write_stream):
             logger.info("BuildingMOTIF MCP server started")
             await self.server.run(read_stream, write_stream, None)

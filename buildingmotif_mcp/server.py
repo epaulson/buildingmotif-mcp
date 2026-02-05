@@ -106,6 +106,10 @@ class BuildingMOTIFServer:
 
     async def run(self) -> None:
         """Run the MCP server."""
-        async with stdio_server(self.server, stdin=sys.stdin.buffer, stdout=sys.stdout.buffer) as (read_stream, write_stream):
+        async with stdio_server() as (read_stream, write_stream):
             logger.info("BuildingMOTIF MCP server started")
-            await self.server.run(read_stream, write_stream, None)
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options(),
+            )

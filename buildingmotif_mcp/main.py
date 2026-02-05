@@ -26,8 +26,15 @@ def main() -> None:
     logger = logging.getLogger(__name__)
     logger.info("Starting BuildingMOTIF MCP server")
 
+    # Parse custom ontology paths from environment variable
+    ontology_paths = None
+    env_paths = os.getenv("BUILDINGMOTIF_ONTOLOGY_PATHS", "")
+    if env_paths:
+        ontology_paths = [p.strip() for p in env_paths.split(":") if p.strip()]
+        logger.info(f"Custom ontology paths from environment: {ontology_paths}")
+
     try:
-        server = BuildingMOTIFServer()
+        server = BuildingMOTIFServer(ontology_paths=ontology_paths)
         asyncio.run(server.run())
     except KeyboardInterrupt:
         logger.info("Server interrupted by user")

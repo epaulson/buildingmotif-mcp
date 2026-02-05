@@ -17,10 +17,14 @@ logger = logging.getLogger(__name__)
 class BuildingMOTIFServer:
     """MCP server for BuildingMOTIF operations."""
 
-    def __init__(self):
-        """Initialize the MCP server."""
+    def __init__(self, ontology_paths=None):
+        """Initialize the MCP server.
+        
+        Args:
+            ontology_paths: Optional list of custom ontology paths to load
+        """
         self.server = Server("buildingmotif-mcp")
-        self.ontology_manager = OntologyManager()
+        self.ontology_manager = OntologyManager(ontology_paths=ontology_paths)
         self.tools = BuildingMOTIFTools(self.ontology_manager)
 
         # Register MCP handlers

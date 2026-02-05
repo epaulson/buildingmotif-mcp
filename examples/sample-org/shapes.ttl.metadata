@@ -1,0 +1,7 @@
+{
+  "name": "Sample Organization Shapes",
+  "description": "Example SHACL shapes demonstrating organizational requirements. This shows how to enforce custom rules like requiring temperature sensors on every floor and equipment naming conventions.",
+  "type": "custom",
+  "version": "1.0",
+  "tags": ["shacl", "validation", "organizational-rules"]
+}

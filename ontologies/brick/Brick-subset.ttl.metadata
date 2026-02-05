@@ -1,0 +1,8 @@
+{
+  "name": "Brick Schema",
+  "description": "Brick is a uniform metadata schema for buildings. It provides a standardized vocabulary and semantic model for describing buildings, their subsystems, and the relationships between them.",
+  "type": "builtin",
+  "version": "1.3",
+  "url": "https://brickschema.org/",
+  "tags": ["hvac", "buildings", "iot", "metadata"]
+}

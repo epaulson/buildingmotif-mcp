@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "buildingmotif-mcp"
+version = "0.1.0"
+description = "MCP server for BuildingMOTIF - Intelligent Brick model creation from unstructured building data"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "BuildingMOTIF MCP Contributors"}
+]
+license = {text = "LICENSE"}
+
+dependencies = [
+    "mcp>=0.1.0",
+    "rdflib>=7.0.0",
+    "buildingmotif @ git+https://github.com/NREL/BuildingMOTIF.git",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+buildingmotif-mcp = "buildingmotif_mcp.main:main"
+
+[tool.setuptools]
+packages = ["buildingmotif_mcp"]
+
+[tool.setuptools.package-data]
+buildingmotif_mcp = ["ontologies/**/*"]

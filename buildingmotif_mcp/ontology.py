@@ -27,10 +27,22 @@ class OntologyManager:
         self.library_metadata: Dict[str, dict] = {}
         self.ontology_paths = ontology_paths or []
 
-        # Always add bundled ontologies
+        # Always add bundled ontologies - handle both dev and installed scenarios
         bundled_ontologies = Path(__file__).parent.parent / "ontologies"
         if bundled_ontologies.exists():
+            logger.info(f"Found bundled ontologies at: {bundled_ontologies}")
             self.ontology_paths.insert(0, str(bundled_ontologies))
+        else:
+            # Try to find ontologies from installed package location
+            try:
+                import importlib.resources as pkg_resources
+                # For Python 3.9+
+                ontologies_path = Path(str(pkg_resources.files('buildingmotif_mcp'))) / "ontologies"
+                if ontologies_path.exists():
+                    logger.info(f"Found installed ontologies at: {ontologies_path}")
+                    self.ontology_paths.insert(0, str(ontologies_path))
+            except (ImportError, AttributeError, TypeError):
+                logger.warning("Could not find bundled ontologies in installed package")
 
         logger.info(f"Ontology search paths: {self.ontology_paths}")
         self._load_ontologies()
